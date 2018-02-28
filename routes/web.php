@@ -11,15 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'index');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/oauth/twitter', 'TwitterAuthController@redirect');
-    Route::get('/oauth/callback', 'TwitterAuthController@callback');
 Route::group(['middleware' => 'auth'], function () {
 });
