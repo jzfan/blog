@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paragraph extends Model
 {
-    //
+    protected $guarded = [];
 }

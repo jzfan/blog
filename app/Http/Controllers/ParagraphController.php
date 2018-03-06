@@ -9,7 +9,10 @@ class ParagraphController extends Controller
 {
     public function index()
     {
-        
+        if (request()->has('cid')) {
+            return Paragraph::where('category_id', request('cid'))->get();
+        }
+        return Paragraph::all();
     }
 
     /**
@@ -55,16 +58,10 @@ class ParagraphController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Paragraph  $paragraph
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Paragraph $paragraph)
     {
-        //
+        $paragraph->update($request->all());
+        return $paragraph;
     }
 
     /**

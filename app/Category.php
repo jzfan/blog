@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     protected $guarded = [];
+    protected $withCount = ['paragraphs'];
+
+    protected static function boot()
+    {
+        self::deleting(function ($c) {
+            $c->paragraphs()->delete();
+            $c->children()->delete();
+        });
+    }
 
     public function parent()
     {
@@ -20,6 +29,11 @@ class Category extends Model
 
     public static function tree()
     {
-        return self::whereNull('parent_id')->with('children.children')->get();
+        return self::whereNull('parent_id')->with('children.children')->orderBy('id', 'desc')->get();
+    }
+
+    public function paragraphs()
+    {
+        return $this->hasMany(Paragraph::class);
     }
 }

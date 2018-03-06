@@ -11,17 +11,6 @@ class CategoryController extends Controller
     {
         $tree = Category::tree();
         return $tree;
-        dd($tree->toArray());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -32,7 +21,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:categories'
+        ]);
+        $c = Category::create($data);
+        $c->children = collect([]);
+        $c->paragraphs_count = 0;
+        return $c;
     }
 
     /**
@@ -43,7 +38,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return $category->paragraphs;
     }
 
     /**
@@ -69,14 +64,8 @@ class CategoryController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
     }
 }
