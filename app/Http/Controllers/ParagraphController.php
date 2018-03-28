@@ -9,10 +9,10 @@ class ParagraphController extends Controller
 {
     public function index()
     {
-        if (request()->has('cid')) {
-            return Paragraph::where('category_id', request('cid'))->get();
+        if (request()->has('category')) {
+            return Paragraph::where('category', request('category'))->get();
         }
-        return Paragraph::all();
+        return Paragraph::orderBy('id', 'desc')->paginate(10);
     }
 
     /**

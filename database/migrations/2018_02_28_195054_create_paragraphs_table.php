@@ -15,11 +15,9 @@ class CreateParagraphsTable extends Migration
     {
         Schema::create('paragraphs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('category_id');
+            $table->string('category', 20);
             $table->text('content');
             $table->timestamps();
-
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

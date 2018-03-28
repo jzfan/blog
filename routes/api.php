@@ -17,5 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('categories', 'CategoryController');
 Route::apiResource('paragraphs', 'ParagraphController');
+Route::delete('marks', 'MarkController@destroy');
