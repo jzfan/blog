@@ -7,35 +7,24 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        if (request()->has('keyword')) {
+            $like = '%'.request('keyword').'%';
+            return Tag::where('abbr', 'like', $like)->orWhere('name', 'like', $like)->orderBy('abbr')->get();
+        }
+        return Tag::orderBy('abbr')->get()->groupBy(function ($item, $key) {
+            return substr($item['abbr'], 0, 1);
+        });
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        request()->validate([
+            'name' => 'required'
+        ]);
+        return Tag::createByName(request('name'));
     }
 
     /**
@@ -49,37 +38,18 @@ class TagController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tag $tag)
+    public function update(Tag $tag)
     {
-        //
+        $data = request()->validate([
+                'name' => 'required'
+            ]);
+        $tag->update($data);
+        return $tag;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tag $tag)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return response()->json('deleted', 200);
     }
 }

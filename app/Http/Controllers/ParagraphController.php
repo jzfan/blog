@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use App\Paragraph;
 use Illuminate\Http\Request;
 
@@ -12,28 +13,19 @@ class ParagraphController extends Controller
         if (request()->has('category')) {
             return Paragraph::where('category', request('category'))->get();
         }
-        return Paragraph::orderBy('id', 'desc')->paginate(10);
+        if (request()->has('tag_id')) {
+            return Tag::findOrFail(request('tag_id'))->paragraphs;
+        }
+        return Paragraph::orderBy('updated_at', 'desc')->take(10)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'content' => 'required|min:10',
+            'category' => 'required|in:' . join(',', config('category'))
+        ]);
+        return Paragraph::create($data);
     }
 
     /**
@@ -64,14 +56,9 @@ class ParagraphController extends Controller
         return $paragraph;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Paragraph  $paragraph
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Paragraph $paragraph)
     {
-        //
+        $paragraph->delete();
+        return 'deleted';
     }
 }

@@ -18,4 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('paragraphs', 'ParagraphController');
+Route::apiResource('tags', 'TagController', ['only' => ['index', 'store', 'update', 'destroy']]);
 Route::delete('marks', 'MarkController@destroy');
+Route::post('marks', 'MarkController@store');
+
+Route::get('categories', 'CategoryController@index');

@@ -17,7 +17,7 @@ class CreateTagsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('pinyin');
-            $table->string('py');
+            $table->string('abbr');
             $table->timestamps();
         });
     }

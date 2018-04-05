@@ -7,6 +7,6 @@ $factory->define(App\Tag::class, function (Faker $faker) {
     return [
         'name' => join(' ', $word),
         'pinyin' => join('-', $word),
-        'py' => $word[0][0] . $word[1][0]
+        'abbr' => $word[0][0] . $word[1][0]
     ];
 });
